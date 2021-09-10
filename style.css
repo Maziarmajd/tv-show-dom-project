@@ -1,3 +1,20 @@
 #root {
-  color: red;
+  color: rgb(204, 60, 60);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.card {
+  width: 250px;
+  padding: 50px 50px;
+  opacity: 0.8;
+  transition: 0.5s ease;
+  backface-visibility: visible;
+  cursor: pointer;
+}
+.card:hover {
+  opacity: 2;
+  transform: scale(1.1);
+  box-shadow: 5px 5px 5px 5px #c2cccc;
 }
