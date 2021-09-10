@@ -6,9 +6,8 @@ function setup() {
 
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
- // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
-
-   episodeList.forEach((episode) => {
+  // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
+    episodeList.forEach((episode) => {
     //Create card for each episode details
     const divCard = document.createElement("div");
     divCard.setAttribute("class", "card");
@@ -40,9 +39,5 @@ function makePageForEpisodes(episodeList) {
     divCard.appendChild(linkToSite);
     rootElem.appendChild(divCard);
   });
-
 }
-
 window.onload = setup;
-
-
