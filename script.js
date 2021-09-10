@@ -2,11 +2,42 @@
 function setup() {
   const allEpisodes = getAllEpisodes();
   makePageForEpisodes(allEpisodes);
+    const searchBar = document.getElementById("input");
+
+  searchBar.addEventListener("keyup", (el) => {
+    const searchString = el.target.value.toLowerCase();
+    let allEpiCards = document.getElementsByClassName("card");
+
+    const searchEpisode = document.getElementById("available");
+    const filteredShow = allEpisodes.filter((episode) => {
+      return (
+        episode.name.toLowerCase().includes(searchString) ||
+        episode.summary.toLowerCase().includes(searchString)
+      );
+    });
+
+    searchEpisode.textContent = `${filteredShow.length}/`;
+
+    Array.from(allEpiCards).forEach((e) => {
+      const title = e.children[1].textContent;
+      const epiSum = e.children[3].textContent;
+      if (
+        title.toLowerCase().indexOf(searchString) !== -1 ||
+        epiSum.toLowerCase().indexOf(searchString) !== -1
+      ) {
+        e.style.display = "block";
+      } else {
+        e.style.display = "none";
+      }
+    });
+  });
 }
 
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
+  const totalEpisode = document.getElementById("total");
+  totalEpisode.textContent = `${episodeList.length}`;
     episodeList.forEach((episode) => {
     //Create card for each episode details
     const divCard = document.createElement("div");
@@ -35,8 +66,8 @@ function makePageForEpisodes(episodeList) {
     epiSummary.innerHTML = episode.summary;
 
     //click on card will direct to the specific episode on that site
-    linkToSite.append(showCover, showTitle, showEpisode, epiSummary);
-    divCard.appendChild(linkToSite);
+    linkToSite.appendChild(showEpisode);
+    divCard.append(showCover, showTitle, linkToSite, epiSummary);
     rootElem.appendChild(divCard);
   });
 }
