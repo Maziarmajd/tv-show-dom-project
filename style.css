@@ -1,7 +1,8 @@
 #root {
-  color: rgb(204, 60, 60);
+  color: rgb(255, 0, 0);
   display: flex;
   flex-wrap: wrap;
+  background-color: rgb(0, 0, 0);
 }
 
 
@@ -12,9 +13,9 @@
   transition: 0.5s ease;
   backface-visibility: visible;
   cursor: pointer;
-}
+  }
 .card:hover {
   opacity: 2;
   transform: scale(1.1);
-  box-shadow: 5px 5px 5px 5px #c2cccc;
+box-shadow: 2px 2px 10px 14px rgba(255, 255, 255, 0.2);
 }
