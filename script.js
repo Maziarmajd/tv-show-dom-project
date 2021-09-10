@@ -6,7 +6,7 @@ function setup() {
 
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
-  rootElem.textContent = `Got ${episodeList.length} episode(s)`;
+ // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
 
    episodeList.forEach((episode) => {
     //Create card for each episode details
