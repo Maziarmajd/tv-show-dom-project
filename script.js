@@ -3,18 +3,22 @@ const episodeList = document.getElementById("root");
 const searchBar = document.getElementById("search-input");
 const currentEpisodes = document.getElementById("available");
 const selectEpi = document.getElementById("selectEpisode");
+const selectShow = document.getElementById("selectShow");
 const input = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 let showEpisodes = [];
+const newShows = getAllShows();
+let mainUrl = "https://api.tvmaze.com/shows/82/episodes";
 
 function setup() {
-  loadEpisode();
+  loadEpisode(mainUrl);
+  displayShowList(newShows);
 }
 
 //<----------------------------------------fetch data------------------------------------->
-const loadEpisode = async () => {
+const loadEpisode = async (url) => {
   try {
-    const res = await fetch("https://api.tvmaze.com/shows/82/episodes");
+    const res = await fetch(url);
 
     showEpisodes = await res.json();
     displayEpisodes(showEpisodes);
@@ -60,14 +64,31 @@ const displayEpisodeList = (episodeList) => {
   selectEpi.innerHTML = listOption;
 };
 
+// <-----------------------------------Create option tag for select new shows--------------------->
+const displayShowList = (showsList) => {
+  const showsOption = showsList.map((show) => {
+    return `${show.name}<option value="${show.id}">${show.name}</option>`;
+  });
+  showsOption.sort();
+
+  selectShow.innerHTML = showsOption;
+};
+
 //<----------------------this function will display the episode that user choose-------------->
 function selectFilter() {
-  const usersOptionValue = document.querySelector("select");
+  const usersOptionValue = document.getElementById("selectEpisode");
   let selectedValue = usersOptionValue.value;
   const filterUserSelectedEpisode = showEpisodes.filter((episode) => {
     return episode.name.includes(selectedValue);
   });
   displayEpisodes(filterUserSelectedEpisode);
+}
+
+//<----------------------this function will display the show that user choose-------------->
+function selectShowFunction() {
+  const showOptionValue = document.getElementById("selectShow");
+  let selectedValue = `https://api.tvmaze.com/shows/${showOptionValue.value}/episodes`;
+  loadEpisode(selectedValue);
 }
 
 // <-----------This function will display the episode according to alphabet on search bar------->
