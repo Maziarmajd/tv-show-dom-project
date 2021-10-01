@@ -1,83 +1,97 @@
-//You can edit ALL of the code here
+//Global variable to reuse again in many function.
+const episodeList = document.getElementById("root");
+const searchBar = document.getElementById("search-input");
+const currentEpisodes = document.getElementById("available");
+const selectEpi = document.getElementById("selectEpisode");
+const input = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
+let showEpisodes = [];
+
 function setup() {
-  const allEpisodes = getAllEpisodes();
-  makePageForEpisodes(allEpisodes);
-    const searchBar = document.getElementById("input");
+  loadEpisode();
+}
 
-  searchBar.addEventListener("keyup", (el) => {
-    const searchString = el.target.value.toLowerCase();
-    let allEpiCards = document.getElementsByClassName("card");
+//<----------------------------------------fetch data------------------------------------->
+const loadEpisode = async () => {
+  try {
+    const res = await fetch("https://api.tvmaze.com/shows/82/episodes");
 
-    const searchEpisode = document.getElementById("available");
-    const filteredShow = allEpisodes.filter((episode) => {
-      return (
-        episode.name.toLowerCase().includes(searchString) ||
-        episode.summary.toLowerCase().includes(searchString)
-      );
-    });
+    showEpisodes = await res.json();
+    displayEpisodes(showEpisodes);
+    displayEpisodeList(showEpisodes);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-    searchEpisode.textContent = `${filteredShow.length}/`;
+//<--------------------------------------Create card for each episode----------------------->
+const displayEpisodes = (episodes) => {
+  const htmlString = episodes
+    .map((episode) => {
+      return `
+            <div class="card">
+                <img src="${episode.image.medium}"></img>
+                <h1>${episode.name}</h1>
+                <h2>S${episode.season
+                  .toString()
+                  .padStart(2, 0)}E${episode.number
+        .toString()
+        .padStart(2, 0)}</h2>
+                <div>${episode.summary}</div>
+                
+            </div>
+        `;
+    })
+    .join("");
+  episodeList.innerHTML = htmlString;
+};
 
-    Array.from(allEpiCards).forEach((e) => {
-      const title = e.children[1].textContent;
-      const epiSum = e.children[3].textContent;
-      if (
-        title.toLowerCase().indexOf(searchString) !== -1 ||
-        epiSum.toLowerCase().indexOf(searchString) !== -1
-      ) {
-        e.style.display = "block";
-      } else {
-        e.style.display = "none";
-      }
-    });
+// <-----------------------------------Create option tag for select list--------------------->
+const displayEpisodeList = (episodeList) => {
+  const listOption = episodeList
+    .map((episode) => {
+      return `<option value="${episode.name}">${episode.season
+        .toString()
+        .padStart(2, 0)}E${episode.number.toString().padStart(2, 0)}-${
+        episode.name
+      }</option>`;
+    })
+    .join("");
+  selectEpi.innerHTML = listOption;
+};
+
+//<----------------------this function will display the episode that user choose-------------->
+function selectFilter() {
+  const usersOptionValue = document.querySelector("select");
+  let selectedValue = usersOptionValue.value;
+  const filterUserSelectedEpisode = showEpisodes.filter((episode) => {
+    return episode.name.includes(selectedValue);
   });
+  displayEpisodes(filterUserSelectedEpisode);
 }
 
-function makePageForEpisodes(episodeList) {
-  const rootElem = document.getElementById("root");
-  // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
-  const totalEpisode = document.getElementById("total");
-  totalEpisode.textContent = `${episodeList.length}`;
-    const selectEpi = document.getElementById("selectEpisode");
+// <-----------This function will display the episode according to alphabet on search bar------->
+searchBar.addEventListener("keyup", (e) => {
+  const searchString = e.target.value.toLowerCase();
 
-    episodeList.forEach((episode) => {
-      //Create card for each episode details
-      const divCard = document.createElement("div");
-      divCard.setAttribute("class", "card");
-      divCard.setAttribute("id", `${episode.id}`);
+  const filteredEpisodes = showEpisodes.filter((episode) => {
+    return (
+      episode.name.toLowerCase().includes(searchString) ||
+      episode.summary.toLowerCase().includes(searchString)
+    );
+  });
+  displayEpisodes(filteredEpisodes);
+  currentEpisodes.innerText = `Displaying ${filteredEpisodes.length}/${showEpisodes.length} episodes`;
+});
 
-      //Create anchors tag to link to original site for particular episode.
-      const linkToSite = document.createElement("a");
-      linkToSite.href = episode.url;
-      linkToSite.style.textDecoration = "none";
-      linkToSite.style.color = "red";
+// <---search bar anime function--->
+const expand = () => {
+  searchBtn.classList.toggle("close");
+  input.classList.toggle("square");
+  currentEpisodes.innerText = "";
+  displayEpisodes(showEpisodes);
+};
 
-      //image of episode (medium size)
-      const showCover = document.createElement("img");
-      showCover.src = episode.image.medium;
+searchBtn.addEventListener("click", expand);
 
-      const showTitle = document.createElement("h1");
-      showTitle.innerText = episode.name;
-
-      // episode season and number combine in (S01E01) method
-      const showEpisode = document.createElement("h2");
-      let showSeason = episode.season.toString().padStart(2, 0);
-      let episodeNumber = episode.number.toString().padStart(2, 0);
-      showEpisode.innerText = `S${showSeason}E${episodeNumber}`;
-
-      const epiSummary = document.createElement("p");
-      epiSummary.innerHTML = episode.summary;
-
-      //create episode list.
-      const option = document.createElement("option");
-      option.innerText = `S${showSeason}E${episodeNumber}-${episode.name}`;
-      option.value = `#${episode.id}`;
-      selectEpi.appendChild(option);
-
-      //click on card will direct to the specific episode on that site
-      linkToSite.appendChild(showEpisode);
-      divCard.append(showCover, showTitle, linkToSite, epiSummary);
-      rootElem.appendChild(divCard);
-    });
-}
 window.onload = setup;
