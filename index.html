@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | My Name (My GitHub username)</title>
+    <title>TV Show Project | Maziar Majd (Maziarmajd)</title>
     <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
@@ -20,22 +20,26 @@
         </form>
       </div>
     </div>
-    <select
-      name="episodes"
-      onchange="selectFilter()"
-      id="selectEpisode"
-    ></select>
-
+    <div id="select-sections">
+      <select
+        name="episodes"
+        onchange="selectFilter()"
+        id="selectEpisode"
+      ></select>
+      <select name="newShow" id="selectShow" onchange="selectShowFunction()"></select>
+    </div>
 
     <div id="root"></div>
 
-    <footer id="footer"><a href="https://www.tvmaze.com/api#licensing" target="_blank">
-        © TVmaze.com </a></footer>
-    
+    <footer id="footer">
+      <a href="https://www.tvmaze.com/api#licensing" target="_blank">
+        © TVmaze.com
+      </a>
+    </footer>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
-
+    <script src="./shows.js"></script>
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
   </body>
