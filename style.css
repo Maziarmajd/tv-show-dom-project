@@ -1,50 +1,203 @@
-body{
+body {
   background-color: black;
-  color: rgb(255, 0, 0);
-}
-#input{
- text-align: center;
- font-size: 15px;
-}
-#icon{
-  margin-right: 50px;
-  margin-left: 50px ;
-  padding-bottom: 10px;
-}
-
-#searchWrapper{
-  font-size: 40px;
-  margin-left: auto;
-  margin-right: auto;
-  display: table;
-  text-align: center;
+  color: white;
 }
 
 #root {
-  color: rgb(255, 0, 0);
+  background-color: black;
+  color: rgb(247, 8, 8);
   display: flex;
   flex-wrap: wrap;
+  margin: 100px 100px;
+  justify-content: space-around;
 }
-
-
 .card {
   width: 250px;
-  padding: 50px 50px 50px 50px;
+  padding: 50px 45px 45px 50px;
   opacity: 0.8;
   transition: 0.5s ease;
   backface-visibility: visible;
   cursor: pointer;
-  border: 2px solid  white;
+  border: 2px solid white;
   border-radius: 5px;
   margin: 20px;
   margin-left: auto;
   margin-right: auto;
-  }
+}
 .card:hover {
   opacity: 2;
   transform: scale(1.1);
   box-shadow: 2px 2px 10px 14px rgba(255, 255, 255, 0.2);
 }
+/*---------------------------------------------------------*/
 
+#content {
+  position: absolute;
+  height: 50px;
+  width: 300px;
+  top: 10%;
+}
 
+#content.on {
+  -webkit-animation-name: in-out;
+  animation-name: in-out;
+  -webkit-animation-duration: 0.7s;
+  animation-duration: 0.7s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}
 
+input {
+  box-sizing: border-box;
+  width: 50px;
+  height: 50px;
+  border: 4px solid black;
+  border-radius: 50%;
+  background: none;
+  color: black;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: Roboto;
+  outline: 0;
+  -webkit-transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
+    padding 0.2s;
+  transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
+    padding 0.2s;
+  -webkit-transition-delay: 0.4s;
+  transition-delay: 0.4s;
+  -webkit-transform: translate(-100%, -50%);
+  -ms-transform: translate(-100%, -50%);
+  transform: translate(-100%, -50%);
+}
+
+.search {
+  background: none;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  height: 50px;
+  width: 50px;
+  padding: 0;
+  border-radius: 100%;
+  outline: 0;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+  -webkit-transform: translate(-100%, -50%);
+  -ms-transform: translate(-100%, -50%);
+  transform: translate(-100%, -50%);
+}
+
+.search:before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 4px;
+  background-color: black;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  margin-top: 26px;
+  margin-left: 17px;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+.close {
+  -webkit-transition: 0.4s ease-in-out;
+  transition: 0.4s ease-in-out;
+  -webkit-transition-delay: 0.4s;
+  transition-delay: 0.4s;
+}
+
+.close:before {
+  content: "";
+  position: absolute;
+  width: 27px;
+  height: 4px;
+  margin-top: -1px;
+  margin-left: -13px;
+  background-color: black;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+.close:after {
+  content: "";
+  position: absolute;
+  width: 27px;
+  height: 4px;
+  background-color: black;
+  margin-top: -1px;
+  margin-left: -13px;
+  cursor: pointer;
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.square {
+  box-sizing: border-box;
+  padding: 0 40px 0 10px;
+  width: 300px;
+  height: 50px;
+  border: 4px solid black;
+  border-radius: 0;
+  background: none;
+  color: black;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 400;
+  outline: 0;
+  -webkit-transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
+    padding 0.2s;
+  transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
+    padding 0.2s;
+  -webkit-transition-delay: 0.4s, 0s, 0.4s;
+  transition-delay: 0.4s, 0s, 0.4s;
+  -webkit-transform: translate(-100%, -50%);
+  -ms-transform: translate(-100%, -50%);
+  transform: translate(-100%, -50%);
+}
+
+/* Style the header with a grey background and some padding */
+.header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f10909;
+  padding: 20px 50px;
+}
+
+#footer {
+  background-color: rgb(255, 255, 255);
+  padding: 4rem;
+  font-size: 2rem;
+  text-align: center;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#footer a {
+  text-decoration: none;
+}
+
+/* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
+@media screen and (max-width: 500px) {
+  .square {
+    width: 200px;
+  }
+
+  #content {
+    position: absolute;
+    height: 50px;
+    width: 300px;
+    top: 12%;
+    left: 85%;
+  }
+}
