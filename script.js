@@ -1,42 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | My Name (My GitHub username)</title>
-    <link href="style.css" rel="stylesheet" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  </head>
+//Global variable to reuse again in many function.
+const episodeList = document.getElementById("root");
+const searchBar = document.getElementById("search-input");
+const currentEpisodes = document.getElementById("available");
+const selectEpi = document.getElementById("selectEpisode");
+const input = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
+let showEpisodes = [];
 
-  <body>
-    <!--Header-->
-    <div class="header">
-      <img src="./favicon.ico" alt="image of text TV" width="100px" />
-      <span id="available"></span>
-      <div class="header-right">
-        <form id="content">
-          <input type="text" name="input" class="input" id="search-input" />
-          <button type="reset" class="search" id="search-btn"></button>
-        </form>
-      </div>
-    </div>
-    <select
-      name="episodes"
-      onchange="selectFilter()"
-      id="selectEpisode"
-    ></select>
+function setup() {
+  loadEpisode();
+}
 
+//<----------------------------------------fetch data------------------------------------->
+const loadEpisode = async () => {
+  try {
+    const res = await fetch("https://api.tvmaze.com/shows/82/episodes");
 
-    <div id="root"></div>
+    showEpisodes = await res.json();
+    displayEpisodes(showEpisodes);
+    displayEpisodeList(showEpisodes);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-    <footer id="footer"><a href="https://www.tvmaze.com/api#licensing" target="_blank">
-        © TVmaze.com </a></footer>
-    
+//<--------------------------------------Create card for each episode----------------------->
+const displayEpisodes = (episodes) => {
+  const htmlString = episodes
+    .map((episode) => {
+      return `
+            <div class="card">
+                <img src="${episode.image.medium}"></img>
+                <h1>${episode.name}</h1>
+                <h2>S${episode.season
+                  .toString()
+                  .padStart(2, 0)}E${episode.number
+        .toString()
+        .padStart(2, 0)}</h2>
+                <div>${episode.summary}</div>
+                
+            </div>
+        `;
+    })
+    .join("");
+  episodeList.innerHTML = htmlString;
+};
 
-    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-    <script src="episodes.js"></script>
+// <-----------------------------------Create option tag for select list--------------------->
+const displayEpisodeList = (episodeList) => {
+  const listOption = episodeList
+    .map((episode) => {
+      return `<option value="${episode.name}">${episode.season
+        .toString()
+        .padStart(2, 0)}E${episode.number.toString().padStart(2, 0)}-${
+        episode.name
+      }</option>`;
+    })
+    .join("");
+  selectEpi.innerHTML = listOption;
+};
 
-    <!-- Loads YOUR javascript code -->
-    <script src="script.js"></script>
-  </body>
-</html>
+//<----------------------this function will display the episode that user choose-------------->
+function selectFilter() {
+  const usersOptionValue = document.querySelector("select");
+  let selectedValue = usersOptionValue.value;
+  const filterUserSelectedEpisode = showEpisodes.filter((episode) => {
+    return episode.name.includes(selectedValue);
+  });
+  displayEpisodes(filterUserSelectedEpisode);
+}
+
+// <-----------This function will display the episode according to alphabet on search bar------->
+searchBar.addEventListener("keyup", (e) => {
+  const searchString = e.target.value.toLowerCase();
+
+  const filteredEpisodes = showEpisodes.filter((episode) => {
+    return (
+      episode.name.toLowerCase().includes(searchString) ||
+      episode.summary.toLowerCase().includes(searchString)
+    );
+  });
+  displayEpisodes(filteredEpisodes);
+  currentEpisodes.innerText = `Displaying ${filteredEpisodes.length}/${showEpisodes.length} episodes`;
+});
+
+// <---search bar anime function--->
+const expand = () => {
+  searchBtn.classList.toggle("close");
+  input.classList.toggle("square");
+  currentEpisodes.innerText = "";
+  displayEpisodes(showEpisodes);
+};
+
+searchBtn.addEventListener("click", expand);
+
+window.onload = setup;
