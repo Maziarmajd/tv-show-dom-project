@@ -34,14 +34,16 @@ const displayEpisodes = (episodes) => {
     .map((episode) => {
       return `
             <div class="card">
-                <img src="${episode.image.medium}"></img>
+                <img src="${
+                  episode.image !== null ? episode.image.medium : ""
+                }"></img>
                 <h1>${episode.name}</h1>
                 <h2>S${episode.season
                   .toString()
                   .padStart(2, 0)}E${episode.number
         .toString()
         .padStart(2, 0)}</h2>
-                <div>${episode.summary}</div>
+                <div>${episode.summary !== null ? episode.summary : ""}</div>
                 
             </div>
         `;
@@ -50,7 +52,7 @@ const displayEpisodes = (episodes) => {
   episodeList.innerHTML = htmlString;
 };
 
-// <-----------------------------------Create option tag for select list--------------------->
+// <-----------------------------------Create option tag for select episode list--------------------->
 const displayEpisodeList = (episodeList) => {
   const listOption = episodeList
     .map((episode) => {
@@ -74,7 +76,7 @@ const displayShowList = (showsList) => {
   selectShow.innerHTML = showsOption;
 };
 
-//<----------------------this function will display the episode that user choose-------------->
+//<----------this function will display the episode that user choose from episode list-(option tag)------------->
 function selectFilter() {
   const usersOptionValue = document.getElementById("selectEpisode");
   let selectedValue = usersOptionValue.value;
@@ -93,12 +95,13 @@ function selectShowFunction() {
 
 // <-----------This function will display the episode according to alphabet on search bar------->
 searchBar.addEventListener("keyup", (e) => {
-  const searchString = e.target.value.toLowerCase();
+  const searchString = e.target.value.toLowerCase().trim();
 
   const filteredEpisodes = showEpisodes.filter((episode) => {
+    const summaryCheck = `${episode.summary !== null ? episode.summary : ""}`;
     return (
       episode.name.toLowerCase().includes(searchString) ||
-      episode.summary.toLowerCase().includes(searchString)
+      summaryCheck.toLowerCase().includes(searchString)
     );
   });
   displayEpisodes(filteredEpisodes);
@@ -116,3 +119,5 @@ const expand = () => {
 searchBtn.addEventListener("click", expand);
 
 window.onload = setup;
+
+//-------------------------------//
